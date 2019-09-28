@@ -1,10 +1,11 @@
 #pragma once
-#include<string>
+#include <string>
 
 class Counter {
-    std::string name;
-    int count = 0;
+  std::string name;
+  int count = 0;
+
  public:
-    void incrementCounter();
-    int getCount();
+  void incrementCounter();
+  int getCount();
 };

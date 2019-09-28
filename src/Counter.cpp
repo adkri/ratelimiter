@@ -1,9 +1,9 @@
-#include<Counter.hpp>
+#include <Counter.hpp>
 
 void Counter::incrementCounter() {
-    count++;
+  count++;
 }
 
 int Counter::getCount() {
-    return count;
+  return count;
 }

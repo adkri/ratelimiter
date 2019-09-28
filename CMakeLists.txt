@@ -1,34 +1,64 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
-PROJECT(ratelimiter)
+cmake_minimum_required(VERSION 3.15)
+project(ratelimiter)
+
+
+# find a boost install with the libraries filesystem and system
+find_package(Boost 1.71.0 REQUIRED COMPONENTS filesystem system)
+include_directories(${Boost_INCLUDE_DIRS})
+#check if boost was found
+if(Boost_FOUND)
+  message("boost found")
+else()
+  message(FATAL_ERROR "cannot find boost")
+endif()
 
 # Configure
-IF(NOT CMAKE_BUILD_TYPE)
-   SET(CMAKE_BUILD_TYPE Release ... FORCE)
-ENDIF()
+if(NOT CMAKE_BUILD_TYPE)
+   set(CMAKE_BUILD_TYPE Release ... FORCE)
+endif()
 
-SET(CMAKE_CXX_STANDARD 14)
-SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
-IF(CMAKE_BUILD_TYPE MATCHES Debug)
-  MESSAGE("INFO: Debug build")
-ELSEIF(CMAKE_BUILD_TYPE MATCHES Release)
-  MESSAGE("INFO: Release build")
-ELSE()
-  MESSAGE("WARNING: Unknown build type")
-ENDIF()
+# enable testing with googletest
+enable_testing()
+add_subdirectory(googletest)
 
-# Includes
-INCLUDE_DIRECTORIES(include)
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+  message("INFO: Debug build")
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+  message("INFO: Release build")
+elseif()
+  message("WARNING: Unknown build type")
+endif()
 
-# Files
-FILE(GLOB CORE    "src/*.cpp")
-FILE(GLOB HEADERS "include/*.hpp")
-FILE(GLOB CLIENT  "src/main.cpp")
-LIST(REMOVE_ITEM CORE "${CMAKE_SOURCE_DIR}/src/main.cpp")
+# set the headers
+set(HEADERS
+  include/Counter.hpp
+)
 
-# Targets
-ADD_LIBRARY(core ${CORE} ${HEADERS})
-ADD_EXECUTABLE(ratelimiter  ${CLIENT} ${HEADERS})
+# set the sources
+set(SOURCES
+  src/Counter.cpp
+)
+# Add library
+add_library(core ${HEADERS} ${SOURCES})
 
-# Link core lib
-TARGET_LINK_LIBRARIES(ratelimiter core)
+# Include directories
+target_include_directories(core
+  PUBLIC
+    ${PROJECT_SOURCE_DIR}/include)
+
+# Make executable
+add_executable(ratelimiter
+  src/main.cpp
+)
+
+# Link libraries
+target_link_libraries(ratelimiter PRIVATE
+  core
+  ${Boost_LIBRARIES}
+)
+
+# add the test subdirectory
+add_subdirectory(test)

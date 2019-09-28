@@ -1,10 +1,10 @@
-#include<iostream>
-#include<Counter.hpp>
+#include <Counter.hpp>
+#include <iostream>
 
 int main() {
-    Counter c;
-    c.incrementCounter();
-    c.incrementCounter();
-    std::cout << c.getCount();
-    return 0;
+  Counter c;
+  c.incrementCounter();
+  c.incrementCounter();
+  std::cout << c.getCount();
+  return 0;
 }
