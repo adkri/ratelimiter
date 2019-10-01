@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.15)
 
 set(SOURCES
     CounterTest.cpp
+    LeakyBucketStrategyTest.cpp
+    TokenBucketStrategyTest.cpp
+    TokenBucketLazyRefillStrategyTest.cpp
+    FixedWindowCounterStrategyTest.cpp
+    SlidingWindowLogStrategyTest.cpp
+    SlidingWindowStrategyTest.cpp
 )
 
 add_executable(ratelimiter_test ${SOURCES})

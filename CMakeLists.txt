@@ -35,11 +35,23 @@ endif()
 # set the headers
 set(HEADERS
   include/Counter.hpp
+  include/strategy/LeakyBucketStrategy.hpp
+  include/strategy/TokenBucketStrategy.hpp
+  include/strategy/TokenBucketLazyRefillStrategy.hpp
+  include/strategy/FixedWindowCounterStrategy.hpp
+  include/strategy/SlidingWindowLogStrategy.hpp
+  include/strategy/SlidingWindowStrategy.hpp
 )
 
 # set the sources
 set(SOURCES
   src/Counter.cpp
+  src/strategy/LeakyBucketStrategy.cpp
+  src/strategy/TokenBucketStrategy.cpp
+  src/strategy/TokenBucketLazyRefillStrategy.cpp
+  src/strategy/FixedWindowCounterStrategy.cpp
+  src/strategy/SlidingWindowLogStrategy.cpp
+  src/strategy/SlidingWindowStrategy.cpp
 )
 # Add library
 add_library(core ${HEADERS} ${SOURCES})
