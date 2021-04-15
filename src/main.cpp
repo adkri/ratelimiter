@@ -1,13 +1,17 @@
 #include <Counter.hpp>
+#include <chrono>
+#include <condition_variable>
+#include <iostream>
+#include <memory>
+#include <mutex>
 #include <strategy/FixedWindowCounterStrategy.hpp>
 #include <strategy/LeakyBucketStrategy.hpp>
 #include <strategy/SlidingWindowLogStrategy.hpp>
 #include <strategy/SlidingWindowStrategy.hpp>
 #include <strategy/TokenBucketLazyRefillStrategy.hpp>
 #include <strategy/TokenBucketStrategy.hpp>
-#include <chrono>
-#include <iostream>
-#include <memory>
+#include <thread>
+#include <vector>
 
 template <typename T>
 void sendRequest(T ratelimiter, int totalCount, int requestPerSec) {
@@ -21,7 +25,7 @@ void sendRequest(T ratelimiter, int totalCount, int requestPerSec) {
   uint32_t count = totalCount;
 
   for (int i = 0; i < totalCount; i++) {
-    std::thread *t = new std::thread([&]() {
+    std::thread* t = new std::thread([&]() {
       while (!ratelimiter->allow()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
       }
@@ -84,13 +88,14 @@ int main() {
   // std::shared_ptr<ratelimiter::FixedWindowBucketStrategy> lbs =
   //     std::make_shared<ratelimiter::FixedWindowBucketStrategy>(MAX_REQUESTS_PER_SEC);
 
-  /* The following two rate limiter will never end if request rate exceeds the limit */
+  /* The following two rate limiter will never end if request rate exceeds the
+   * limit */
   // std::shared_ptr<ratelimiter::SlidingWindowStrategy> lbs =
   //     std::make_shared<ratelimiter::SlidingWindowStrategy>(MAX_REQUESTS_PER_SEC);
 
   // std::shared_ptr<ratelimiter::SlidingWindowLogStrategy> lbs =
   //     std::make_shared<ratelimiter::SlidingWindowLogStrategy>(MAX_REQUESTS_PER_SEC);
-      
+
   startRequestThread(lbs);
   Counter c;
   c.incrementCounter();
